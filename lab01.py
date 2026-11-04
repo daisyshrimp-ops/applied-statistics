@@ -196,18 +196,35 @@ def _(html, mo, np, plt):
 
 
 @app.cell(hide_code=True)
-def _(mo, pd):
+async def _(mo, pd):
     UCI_URL = ("https://archive.ics.uci.edu/ml/machine-learning-databases/"
                "wine-quality/winequality-white.csv")
 
+    async def read_public_csv(filename):
+        """Read bundled CSV locally or fetch it from the notebook URL in WASM."""
+        import sys as _sys
+        from io import StringIO as _StringIO
+        if _sys.platform == "emscripten":
+            from pyodide.http import pyfetch as _pyfetch
+            _url = str(mo.notebook_location() / "public" / filename)
+            _response = await _pyfetch(_url)
+            if not _response.ok:
+                raise RuntimeError(f"Не удалось загрузить {filename}: HTTP {_response.status}")
+            _text = await _response.string()
+            if _text.lstrip().lower().startswith(("<!doctype html", "<html")):
+                raise RuntimeError(f"Вместо CSV {filename} сервер вернул HTML")
+            return pd.read_csv(_StringIO(_text), sep=";")
+        return pd.read_csv(mo.notebook_location() / "public" / filename, sep=";")
 
-    def _load():
-        # Комплектный CSV доступен в серверном режиме и в браузерном WASM.
-        return pd.read_csv(str(mo.notebook_location() / "public" / "winequality-white.csv"), sep=";")
-
-
-    df = _load()
-    return (UCI_URL, df,)
+    try:
+        df = await read_public_csv("winequality-white.csv")
+    except Exception as _data_error:
+        mo.output.append(mo.callout(
+            mo.md(f"**Не удалось загрузить данные.** {_data_error}. "
+                  "Обновите страницу; если ошибка сохраняется, проверьте папку public в публикации."),
+            kind="danger"))
+        mo.stop(True)
+    return (UCI_URL, df, read_public_csv,)
 
 
 @app.cell(hide_code=True)
@@ -1044,7 +1061,7 @@ def _(code_panel, mo, section, project_tabs):
 
 
 @app.cell(hide_code=True)
-def _(np, pd, plt, stats):
+def _(np, pd, plt, stats, read_public_csv):
     from pathlib import Path
 
     EXTRA_VARS = {
@@ -1054,10 +1071,9 @@ def _(np, pd, plt, stats):
 
     EXTRA_COLORS = {'Красное': '#A3333D', 'Белое': '#4F7A45'}
 
-    def extra_load(directory):
-        root = Path(directory)
-        red = pd.read_csv(root / 'winequality-red.csv', sep=';')
-        white = pd.read_csv(root / 'winequality-white.csv', sep=';')
+    async def extra_load():
+        red = await read_public_csv('winequality-red.csv')
+        white = await read_public_csv('winequality-white.csv')
         if list(red.columns) != list(white.columns):
             raise ValueError('Схемы исходных таблиц различаются')
         for frame in (red, white):
@@ -1261,8 +1277,8 @@ def _(np, pd, plt, stats):
 
 
 @app.cell(hide_code=True)
-def _(extra_analyse, extra_load, extra_sensitivity, mo):
-    extra_red_raw, extra_white_raw = extra_load(mo.notebook_location() / 'public')
+async def _(extra_analyse, extra_load, extra_sensitivity, mo):
+    extra_red_raw, extra_white_raw = await extra_load()
     extra_full = extra_analyse(extra_red_raw, extra_white_raw, False)
     extra_unique = extra_analyse(extra_red_raw, extra_white_raw, True)
     extra_sensitivity_table = extra_sensitivity(extra_red_raw, extra_white_raw)
@@ -1376,3 +1392,4 @@ def _(code_panel, mo, prose, section, project_tabs):
 
 if __name__ == "__main__":
     app.run()
+
