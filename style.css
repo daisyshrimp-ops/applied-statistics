@@ -273,50 +273,51 @@ figure.plot img { max-height: 420px; width: auto; object-fit: contain; }
 .chapter-nav a { color: var(--data); font-weight: 600; text-decoration: none; }
 .chapter-nav a:hover { text-decoration: underline; }
 
-/* Вкладки разделяют этапы лабораторной. Тема меняется вместе с вкладкой. */
-body:has(.theme-red-active), body:has(.theme-red-active) #App {
-  --paper: #f7edef; --card: #fffafa; --ink: #352229;
-  --muted: #825e69; --line: #e6cbd2;
-  --data: #963544; --data-soft: #f0d9e0;
-  --ref: #713b66; --ref-soft: #f0e0ee;
-  background: #f7edef !important; color: var(--ink);
+/* Вкладки разделяют этапы лабораторной. Тема меняется вместе с вкладкой.
+   Доп. КТиД (гейзер): бирюзовый — данные, голубой/янтарный — режимы, бордовый — эталон. */
+body:has(.theme-extra-active), body:has(.theme-extra-active) #App {
+  --paper: #eef4f3; --card: #fbfefd; --ink: #1d2e33;
+  --muted: #5a7177; --line: #cfe0de;
+  --data: #1f6f78; --data-soft: #d4e8e7;
+  --ref: #a3333d; --ref-soft: #f6e3e4;
+  background: #eef4f3 !important; color: var(--ink);
 }
-body:has(.theme-red-active) .toc {
-  background: #f1dee4; border: 1px solid #dfbbc6;
+body:has(.theme-extra-active) .toc {
+  background: #e2eeec; border: 1px solid #c4dad7;
   border-radius: 16px; padding: 22px 16px; min-height: 70vh;
 }
-body:has(.theme-red-active) .toc-brand { color: #642437; }
-body:has(.theme-red-active) .toc-sub { color: #825e69; }
-body:has(.theme-red-active) .toc a { color: #7c3044; }
-body:has(.theme-red-active) .toc a:hover { background: #e8c6d0; color: #642437; }
-body:has(.theme-red-active) .sec-title { color: #642437; }
-body:has(.theme-red-active) .sec-l2 { border-top-color: #963544; }
-body:has(.theme-red-active) .sec-num { color: #812c40; background: #edcdd7; }
-body:has(.theme-red-active) .sec-kicker { color: #963544; }
-body:has(.theme-red-active) .code-panel { background: #f0dee4; color: #713144; }
-body:has(.theme-red-active) .stat-item b { color: #812c40; }
-body:has(.theme-red-active) .tbl-wrap,
-body:has(.theme-red-active) .stat-grid { background: #fffafa; }
-body:has(.theme-red-active) input { accent-color: #963544; }
-body:has(.theme-red-active) [role="checkbox"][data-state="checked"] { background: #963544; border-color: #963544; }
-body:has(.theme-red-active) .report-prose a,
-body:has(.theme-red-active) .md-tbl a { color: #963544; }
-body:has(.theme-red-active) .chapter-nav a { color: #812c40; }
-body:has(.theme-red-active) #extra .sec-title { font-family: "Lora", Georgia, serif; }
+body:has(.theme-extra-active) .toc-brand { color: #164f56; }
+body:has(.theme-extra-active) .toc-sub { color: #5a7177; }
+body:has(.theme-extra-active) .toc a { color: #22626a; }
+body:has(.theme-extra-active) .toc a:hover { background: #cfe5e3; color: #164f56; }
+body:has(.theme-extra-active) .sec-title { color: #164f56; }
+body:has(.theme-extra-active) .sec-l2 { border-top-color: #1f6f78; }
+body:has(.theme-extra-active) .sec-num { color: #1a5c64; background: #d4e8e7; }
+body:has(.theme-extra-active) .sec-kicker { color: #1f6f78; }
+body:has(.theme-extra-active) .code-panel { background: #e2eeec; color: #1d4f55; }
+body:has(.theme-extra-active) .stat-item b { color: #1a5c64; }
+body:has(.theme-extra-active) .tbl-wrap,
+body:has(.theme-extra-active) .stat-grid { background: #fbfefd; }
+body:has(.theme-extra-active) input { accent-color: #1f6f78; }
+body:has(.theme-extra-active) [role="checkbox"][data-state="checked"] { background: #1f6f78; border-color: #1f6f78; }
+body:has(.theme-extra-active) .report-prose a,
+body:has(.theme-extra-active) .md-tbl a { color: #1f6f78; }
+body:has(.theme-extra-active) .chapter-nav a { color: #1a5c64; }
+body:has(.theme-extra-active) #extra .sec-title { font-family: "Lora", Georgia, serif; }
 .report-block { min-width: 0; padding: 12px 0; }
 .comparison-block {
-  padding: 22px; border: 1px solid #dfcdd0; border-radius: 18px;
-  background: linear-gradient(110deg, #f6dfe6 0%, #fbf5ef 50%, #e4efdf 100%);
+  padding: 22px; border: 1px solid #d3dedb; border-radius: 18px;
+  background: linear-gradient(110deg, #dcedf2 0%, #fbf5ef 50%, #f6e6d3 100%);
 }
 .comparison-block .sec { border-top: 4px solid; padding-top: 14px;
-  border-image: linear-gradient(90deg, #963544, #bd9c80 50%, #4f7a45) 1; }
-.comparison-block .kpi:first-child { background: #fff6f8; border-top: 3px solid #963544; }
-.comparison-block .kpi:first-child .kpi-v { color: #963544; }
-.comparison-block .kpi:last-child { background: #f4faf0; border-top: 3px solid #4f7a45; }
-.comparison-block .kpi:last-child .kpi-v { color: #4f7a45; }
-body:has(.theme-red-active) .comparison-block .sec-title { color: #48333c; }
-body:has(.theme-red-active) .comparison-block .code-panel {
-  background: linear-gradient(100deg, #eed3dc, #f7eee6 50%, #e0ecd9);
+  border-image: linear-gradient(90deg, #3e8fb0, #a9a58c 50%, #c8742b) 1; }
+.comparison-block .kpi:first-child { background: #f2f8fb; border-top: 3px solid #3e8fb0; }
+.comparison-block .kpi:first-child .kpi-v { color: #3e8fb0; }
+.comparison-block .kpi:last-child { background: #fdf6ee; border-top: 3px solid #c8742b; }
+.comparison-block .kpi:last-child .kpi-v { color: #c8742b; }
+body:has(.theme-extra-active) .comparison-block .sec-title { color: #22353a; }
+body:has(.theme-extra-active) .comparison-block .code-panel {
+  background: linear-gradient(100deg, #d6ebef, #f6f1e8 50%, #f4e2cf);
 }
 [role="tablist"] {
   display: flex; gap: 8px; flex-wrap: wrap; padding: 12px 0;
@@ -342,14 +343,14 @@ body:has(.theme-red-active) .comparison-block .code-panel {
 }
 /* Marimo задаёт цвет подписи отдельному span — наследуем цвет кнопки. */
 [role="tab"][aria-selected="false"] { color: #526049 !important; }
-body:has(.theme-red-active) [role="tab"][aria-selected="false"] { color: #7c3044 !important; }
+body:has(.theme-extra-active) [role="tab"][aria-selected="false"] { color: #22626a !important; }
 [role="tab"] * { color: inherit !important; }
 /* Скрываем предыдущую вкладку сразу, пока marimo обновляет её ячейки. */
 body:has(.theme-white-active) .marimo-cell:has(.sec[id^="extra"]),
 body:has(.theme-white-active) .marimo-cell:has(#sprint2),
-body:has(.theme-red-active) .marimo-cell:has(.sec:not([id^="extra"])),
-body:has(.theme-red-active) .marimo-cell:has(#top),
-body:has(.theme-red-active) .marimo-cell:has(#sprint2),
+body:has(.theme-extra-active) .marimo-cell:has(.sec:not([id^="extra"])),
+body:has(.theme-extra-active) .marimo-cell:has(#top),
+body:has(.theme-extra-active) .marimo-cell:has(#sprint2),
 body:has(.theme-sprint2-active) .marimo-cell:has(.sec),
 body:has(.theme-sprint2-active) .marimo-cell:has(#top) { display: none !important; }
 
@@ -371,17 +372,20 @@ marimo-tabs { display: block; min-width: 0; width: 100%; }
 }
 [role="tab"] .paragraph { margin: 0 !important; line-height: inherit !important; }
 .hero { min-width: 0; }
-.hero-red { scroll-margin-top: 24px; }
-body:has(.theme-red-active) .hero-red .hero-title { color: #352229; }
-body:has(.theme-red-active) .hero-red .hero-title em { color: #963544; }
-body:has(.theme-red-active) .hero-red .hero-kicker { color: #963544; }
-body:has(.theme-red-active) .hero-red .hero-sub { color: #6e4b56; }
-body:has(.theme-red-active) .hero-var:hover { background: #f4e1e7; border-color: #963544; }
+.hero-extra { scroll-margin-top: 24px; }
+body:has(.theme-extra-active) .hero-extra .hero-title { color: #1d2e33; }
+body:has(.theme-extra-active) .hero-extra .hero-title em { color: #1f6f78; }
+body:has(.theme-extra-active) .hero-extra .hero-kicker { color: #1f6f78; }
+body:has(.theme-extra-active) .hero-extra .hero-sub { color: #4c666c; }
+body:has(.theme-extra-active) .hero-var:hover { background: #e0efed; border-color: #1f6f78; }
 /* Обложка допчасти тоже скрывается при переключении вкладок. */
-body:has(.theme-white-active) .marimo-cell:has(.hero-red),
-body:has(.theme-sprint2-active) .marimo-cell:has(.hero-red) { display: none !important; }
+body:has(.theme-white-active) .marimo-cell:has(.hero-extra),
+body:has(.theme-sprint2-active) .marimo-cell:has(.hero-extra) { display: none !important; }
 .comparison-block, .report-block, .hero-var { box-sizing: border-box; min-width: 0; }
 @media (max-width: 640px) {
   [role="tablist"] { min-height: 66px; gap: 6px; padding: 8px !important; }
   [role="tab"] { min-height: 44px; padding: 10px 12px !important; font-size: .87rem; }
 }
+
+/* Заголовок первого столбца таблиц выравниваем как сами подписи строк. */
+.tbl thead th:first-child { text-align: left; }
