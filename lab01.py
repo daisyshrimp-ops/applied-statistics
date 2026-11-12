@@ -475,10 +475,24 @@ def _(mo, project_tabs):
     </header>
     <div class="read-glass" role="progressbar" aria-label="Прочитано отчёта"
          aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
-      <svg viewBox="0 0 40 60" aria-hidden="true">
+      <svg class="read-wine-icon" viewBox="0 0 40 60" aria-hidden="true">
         <defs><clipPath id="reading-bowl"><path d="M6 4 H34 C34 22 30 30 20 32 C10 30 6 22 6 4 Z" /></clipPath></defs>
         <g clip-path="url(#reading-bowl)"><rect class="read-wine" x="6" y="32" width="28" height="0" /></g>
         <path class="read-outline" d="M6 4 H34 C34 22 30 30 20 32 C10 30 6 22 6 4 Z M20 32 V52 M12 56 H28" />
+      </svg>
+      <svg class="read-design" viewBox="0 0 60 60" aria-hidden="true">
+        <defs><clipPath id="reading-canvas"><rect x="6" y="18" width="48" height="28" rx="1" /></clipPath></defs>
+        <g clip-path="url(#reading-canvas)">
+          <rect class="read-wine" data-fill-bottom="46" x="6" y="46" width="48" height="0" />
+        </g>
+        <g class="read-outline">
+          <rect x="3" y="4" width="54" height="46" rx="4" />
+          <path d="M3 14 H57" />
+          <circle cx="9" cy="9" r=".8" /><circle cx="14" cy="9" r=".8" /><circle cx="19" cy="9" r=".8" />
+          <rect x="9" y="21" width="13" height="20" rx="1" />
+          <rect x="27" y="21" width="23" height="8" rx="1" />
+          <path d="M27 34 H50 M27 40 H43" />
+        </g>
       </svg><span class="read-percent" aria-hidden="true">0%</span>
     </div>''')
     return
@@ -1572,6 +1586,7 @@ def _(mo, project_tabs):
 
 if __name__ == "__main__":
     app.run()
+
 
 
 

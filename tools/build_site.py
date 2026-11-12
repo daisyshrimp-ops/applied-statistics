@@ -58,12 +58,14 @@ READING_PROGRESS_JS = r'''
     // Small time-based smoothing, never a delayed jump near the end of the page.
     current = reducedMotion.matches ? target : current + (target - current) * (1 - Math.exp(-elapsed / 75));
     if (Math.abs(current - target) < 0.0001) current = target;
-    const rect = document.querySelector('.read-glass .read-wine');
-    if (rect) {
-      rect.setAttribute('y', (32 - 28 * current).toFixed(4));
-      rect.setAttribute('height', (28 * current).toFixed(4));
+    const indicator = document.querySelector('.read-glass');
+    if (indicator) {
+      indicator.querySelectorAll('.read-wine').forEach(rect => {
+        const bottom = Number(rect.getAttribute('data-fill-bottom') || 32);
+        rect.setAttribute('y', (bottom - 28 * current).toFixed(4));
+        rect.setAttribute('height', (28 * current).toFixed(4));
+      });
       const percent = Math.round(current * 100);
-      const indicator = rect.closest('.read-glass');
       const caption = indicator.querySelector('.read-percent');
       if (caption && caption.textContent !== `${percent}%`) caption.textContent = `${percent}%`;
       if (indicator.getAttribute('aria-valuenow') !== String(percent)) indicator.setAttribute('aria-valuenow', String(percent));
@@ -96,10 +98,87 @@ READING_PROGRESS_JS = r'''
   else init();
 })();
 '''
+REPORT_TRANSITIONS_JS = r'''
+(() => {
+  'use strict';
+  if (window.__team10ReportTransitions) return;
+  window.__team10ReportTransitions = true;
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const views = {'Спринт 1': ['white', 'top'], 'Спринт 2': ['sprint2', 'sprint2'], 'Доп. КТиД': ['extra', 'extra']};
+  let replay = false, switching = false, lastMode = '', enterTimer = 0;
+  const mode = () => document.querySelector('.theme-extra-active') ? 'extra' :
+    document.querySelector('.theme-sprint2-active') ? 'sprint2' :
+    document.querySelector('.theme-white-active') ? 'white' : '';
+  const visible = id => !!document.getElementById(id)?.getClientRects().length;
+  function waitForReport(expected, anchor, activate) {
+    return new Promise(resolve => {
+      let settle = 0, timeout = 0, done = false;
+      const finish = () => {
+        if (done) return;
+        done = true; clearTimeout(settle); clearTimeout(timeout); observer.disconnect(); resolve();
+      };
+      const check = records => {
+        if (records?.length && records.every(r => r.target instanceof Element && r.target.closest('.read-glass'))) return;
+        clearTimeout(settle);
+        if (mode() === expected && visible(anchor)) settle = setTimeout(finish, 100);
+      };
+      const observer = new MutationObserver(check);
+      observer.observe(document.body, {subtree: true, childList: true});
+      timeout = setTimeout(finish, 1400);
+      activate(); check();
+    });
+  }
+  document.addEventListener('click', event => {
+    if (replay || switching || reduced.matches || !document.startViewTransition) return;
+    // marimo renders its buttons inside a shadow root: use the composed event path.
+    const button = event.composedPath().find(node => node instanceof Element && node.getAttribute('role') === 'tab');
+    if (!button || button.getAttribute('aria-selected') === 'true') return;
+    const view = views[button.textContent.trim()];
+    if (!view) return;
+    event.preventDefault(); event.stopImmediatePropagation();
+    const activate = () => {
+      replay = true;
+      try { button.click(); } finally { replay = false; }
+    };
+    switching = true;
+    document.body.classList.remove('report-enter');
+    try {
+      const transition = document.startViewTransition(() => waitForReport(view[0], view[1], activate));
+      transition.finished.catch(() => {}).finally(() => { switching = false; lastMode = mode(); });
+    } catch (_) {
+      switching = false; activate();
+    }
+  }, true);
+  // Firefox versions without View Transitions and keyboard tab changes use a soft entrance.
+  let pending = false;
+  const observer = new MutationObserver(records => {
+    if (pending || records.every(r => r.target instanceof Element && r.target.closest('.read-glass'))) return;
+    pending = true;
+    requestAnimationFrame(() => {
+      pending = false;
+      const next = mode();
+      if (!next || next === lastMode) return;
+      if (lastMode && !switching && !reduced.matches) {
+        clearTimeout(enterTimer);
+        document.body.classList.remove('report-enter');
+        requestAnimationFrame(() => {
+          document.body.classList.add('report-enter');
+          enterTimer = setTimeout(() => document.body.classList.remove('report-enter'), 500);
+        });
+      }
+      lastMode = next;
+    });
+  });
+  observer.observe(document.body, {subtree: true, childList: true});
+})();
+'''
+
 index = root / 'site' / 'index.html'
 page = index.read_text(encoding='utf-8')
 tag = '<script id="team10-reading-progress">' + READING_PROGRESS_JS + '</script>'
 assert '</body>' in page, 'Missing closing body in the exported site'
+tag += '<script id="team10-report-transitions">' + REPORT_TRANSITIONS_JS + '</script>'
 page = page.replace('</body>', tag + '\n</body>', 1)
 index.write_text(page, encoding='utf-8')
 print('Готово: site/index.html. Запуск: python -m http.server --directory site 8000')
+

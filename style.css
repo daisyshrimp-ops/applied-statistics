@@ -763,3 +763,63 @@ body:has(.theme-sprint2-active) .read-glass { display: none; }
   .hero-wine .hero-vars { margin-top: 0; }
   .hero-wine .hero-density { height: 61px; }
 }
+
+
+/* marimo переносит эти правила внутрь Shadow DOM вкладок.
+   Селекторы с #App там не совпадают: задаём стили самому tablist. */
+marimo-tabs { display: block; width: 100%; min-width: 0; }
+[role="tablist"] {
+  display: grid !important; grid-template-columns: repeat(3, minmax(0, 1fr));
+  width: min(100%, 960px) !important; max-width: 100% !important;
+  margin: 0 auto !important; padding: 0 !important;
+  height: auto !important; max-height: none !important; min-height: 80px;
+  gap: 20px !important; justify-content: center !important; align-items: stretch !important;
+}
+[role="tab"] {
+  box-sizing: border-box !important; width: 100%; min-width: 0 !important;
+  min-height: 80px !important; height: auto !important;
+  padding: 22px 32px !important; justify-content: center !important;
+  text-align: center !important; font-size: 1rem !important;
+  letter-spacing: .06em; line-height: 1.4 !important;
+  white-space: nowrap !important; word-break: normal !important;
+}
+[role="tab"] .paragraph { margin: 0 !important; white-space: inherit !important; }
+/* В допработе прогресс показывает заполняющийся макет интерфейса. */
+.read-glass .read-design { display: none; }
+body:has(.theme-extra-active) .read-glass { width: 60px; }
+body:has(.theme-extra-active) .read-glass .read-wine-icon { display: none; }
+body:has(.theme-extra-active) .read-glass .read-design { display: block; height: 63px; }
+@media (max-width: 800px) {
+  body:has(.theme-extra-active) .read-glass { width: 42px; }
+  body:has(.theme-extra-active) .read-glass .read-design { height: 44px; }
+}
+@media (max-width: 640px) {
+  [role="tablist"] { gap: 8px !important; min-height: 64px; }
+  [role="tab"] { min-height: 64px !important; padding: 18px 10px !important;
+    font-size: .85rem !important; letter-spacing: .02em; }
+}
+@media (max-width: 380px) {
+  [role="tablist"] { gap: 4px !important; }
+  [role="tab"] { padding-inline: 6px !important; font-size: .75rem !important; }
+}
+
+/* Мягкое перетекание между исследованиями. */
+body, #App { transition: background-color 420ms ease, color 420ms ease, border-color 420ms ease; }
+.site-wordmark em, .team-badge, .footer-team, .footer-top, .read-glass {
+  transition: color 420ms ease, background-color 420ms ease, border-color 420ms ease;
+}
+::view-transition-old(root) { animation: report-dissolve-out 360ms ease both; }
+::view-transition-new(root) { animation: report-dissolve-in 420ms ease both; }
+@keyframes report-dissolve-out { from { opacity: 1; } to { opacity: 0; } }
+@keyframes report-dissolve-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+body.report-enter .marimo-cell:has(.hero),
+body.report-enter .marimo-cell:has(.sec),
+body.report-enter .marimo-cell:has(.site-footer) { animation: report-dissolve-in 420ms ease both; }
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(root), ::view-transition-new(root) { animation: none !important; }
+  body.report-enter .marimo-cell { animation: none !important; }
+  body, #App, .site-wordmark em, .team-badge, .footer-team, .footer-top, .read-glass { transition: none !important; }
+}
