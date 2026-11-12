@@ -823,3 +823,48 @@ body.report-enter .marimo-cell:has(.site-footer) { animation: report-dissolve-in
   body.report-enter .marimo-cell { animation: none !important; }
   body, #App, .site-wordmark em, .team-badge, .footer-team, .footer-top, .read-glass { transition: none !important; }
 }
+
+
+/* Новая картинка бокала: размер по пропорциям PNG, а не по высоте текста. */
+@media (min-width: 901px) {
+  .hero-wine .hero-intro {
+    display: grid;
+    grid-template-columns: minmax(0, 1.08fr) minmax(0, 1fr);
+    grid-template-rows: auto auto 1fr;
+    column-gap: 28px;
+    padding-bottom: 90px;
+    align-items: start;
+  }
+  .hero-wine .hero-intro > .hero-kicker {
+    grid-column: 1; grid-row: 1; max-width: 100%;
+  }
+  .hero-wine .hero-intro > .hero-title {
+    grid-column: 1; grid-row: 2; max-width: 100%; min-width: 0;
+  }
+  .hero-wine .hero-intro > .hero-sub {
+    grid-column: 1; grid-row: 3; max-width: 100%; min-width: 0;
+  }
+  .hero-wine .hero-intro .wine-hero-art {
+    position: relative;
+    grid-column: 2; grid-row: 1 / 4;
+    align-self: end;
+    inset: auto;
+    width: 132%; max-width: none !important; height: auto;
+    margin: 0 0 -90px -32px;
+    object-fit: contain; object-position: center bottom;
+    transform: none;
+  }
+}
+@media (max-width: 900px) {
+  .hero-wine .hero-intro {
+    display: flex; flex-direction: column; padding-bottom: 0;
+  }
+  .hero-wine .hero-intro > .hero-kicker,
+  .hero-wine .hero-intro > .hero-title,
+  .hero-wine .hero-intro > .hero-sub { max-width: 100%; }
+  .hero-wine .hero-intro .wine-hero-art {
+    position: relative; inset: auto; order: 4;
+    width: 100%; max-width: 500px !important; height: auto;
+    margin: 24px auto -1px; transform: none;
+  }
+}
