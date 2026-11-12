@@ -519,3 +519,127 @@ body:has(.theme-extra-active) .hero-var:hover { background: var(--data-soft); }
   .summary { padding: 22px; }
   figure.plot { padding: 10px; }
 }
+
+/* Версия 2: одинаковые внутренние поля для каждого блока отчёта. */
+:root { --block-gutter: clamp(24px, 4.6vw, 64px); }
+#App .marimo-cell { box-sizing: border-box; min-width: 0; }
+#App .marimo-cell .output-area {
+  box-sizing: border-box; min-width: 0; max-width: 100%;
+  padding-inline: var(--block-gutter) !important;
+}
+#App .output-area > .output { min-width: 0; max-width: 100%; }
+.kpis, .guide-grid, .stat-grid { width: 100%; max-width: 100%; box-sizing: border-box; }
+.kpis { grid-template-columns: repeat(auto-fit, minmax(min(200px, 100%), 1fr)); }
+.kpi, .card, .verdict, .tbl-wrap { min-width: 0; box-sizing: border-box; }
+.kpi-v { overflow-wrap: anywhere; }
+/* Матplotlib отдаёт обычный PNG; ширина и центрирование едины для всех графиков. */
+figure.plot {
+  display: flex; align-items: center; justify-content: center;
+  width: 100%; max-width: 100%; box-sizing: border-box;
+  padding: 24px; margin: 12px auto; text-align: center;
+}
+figure.plot img {
+  display: block; flex: 0 1 auto; max-width: 100%; width: auto; height: auto;
+  max-height: none; margin-inline: auto; object-fit: contain;
+}
+/* Обложки доходят до края блока, текст внутри сохраняет общее поле. */
+.hero {
+  margin-inline: calc(-1 * var(--block-gutter));
+  padding-inline: var(--block-gutter); max-width: none;
+}
+.hero-wine { background: #fff; padding-top: 64px; }
+.hero-wine > :not(.wine-hero-art) { position: relative; z-index: 1; }
+.hero-wine .hero-kicker { max-width: 65%; }
+.hero-wine .hero-title { max-width: 65%; font-size: clamp(42px, 6.1vw, 78px); }
+.hero-wine .hero-sub { max-width: 61%; }
+.wine-hero-art {
+  position: absolute; z-index: 0; top: 20px; right: -50px;
+  width: 62%; height: calc(100% - 180px); max-width: none !important;
+  object-fit: contain; object-position: right bottom; pointer-events: none;
+}
+.hero-wine .hero-vars {
+  margin-top: 44px; background: color-mix(in srgb, var(--data) 48%, white);
+  border-top: 0; padding-inline: 20px;
+}
+.hero-wine .hero-var { background: transparent; }
+.hero-wine .hero-var + .hero-var { border-color: color-mix(in srgb, var(--data) 30%, transparent); }
+.hero-wine .hero-var small { color: #3d5839; }
+.hero-wine .hero-var:hover { background: color-mix(in srgb, var(--data) 15%, transparent); }
+.hero-wine > .hero-sub:last-child { max-width: 100%; padding-block: 20px; margin: 0 !important; }
+/* Меню открывается только по нажатию, закрывается крестиком, Esc или снаружи. */
+.toc-toggle {
+  position: fixed; top: 24px; left: 20px; z-index: 80;
+  width: 48px; height: 48px; display: grid; place-items: center;
+  border: 1px solid var(--line); border-radius: 50%;
+  background: var(--card); color: var(--data); cursor: pointer;
+  box-shadow: 0 4px 18px #0000000b;
+}
+.burger-lines { display: grid; gap: 5px; width: 19px; }
+.burger-lines i { height: 1.5px; display: block; background: currentColor; }
+.toc-toggle:hover, .toc-close:hover { background: var(--data-soft); }
+.toc-toggle:focus-visible, .toc-close:focus-visible, .toc-drawer a:focus-visible {
+  outline: 2px solid var(--data); outline-offset: 3px;
+}
+.toc-drawer {
+  position: fixed; inset: 84px auto auto 20px; margin: 0;
+  box-sizing: border-box; width: min(370px, calc(100vw - 40px));
+  max-height: calc(100dvh - 108px); padding: 26px;
+  border: 1px solid var(--line); border-radius: 12px;
+  background: var(--card); color: var(--ink); overflow-y: auto;
+  box-shadow: 0 16px 60px #15251c26; overscroll-behavior: contain;
+}
+.toc-drawer::backdrop { background: #14251b14; }
+.toc-drawer-head { display: flex; gap: 16px; justify-content: space-between;
+  align-items: flex-start; padding-bottom: 18px; border-bottom: 1px solid var(--line); }
+.toc-caption { font-size: 10px; letter-spacing: .16em; text-transform: uppercase; color: var(--data); }
+.toc-drawer-head h2 { font-size: 19px; font-weight: 500; line-height: 1.4; margin: 6px 0 0; }
+.toc-close { width: 34px; height: 34px; flex: none; border: 1px solid var(--line);
+  border-radius: 50%; background: transparent; color: var(--data); font-size: 24px; cursor: pointer; }
+.toc-drawer ol { list-style: none; margin: 16px 0 0; padding: 0; }
+.toc-drawer ol ol { margin: 0 0 10px 10px; padding-left: 10px; border-left: 1px solid var(--line); }
+.toc-drawer a { display: block; padding: 8px 6px; border-radius: 4px;
+  color: var(--ink); text-decoration: none; font-size: 14px; line-height: 1.5; overflow-wrap: anywhere; }
+.toc-drawer ol ol a { font-size: 12px; color: var(--muted); padding-block: 5px; }
+.toc-drawer .toc-chapter { color: var(--data); font-weight: 600; }
+.toc-drawer a:hover { background: var(--data-soft); color: var(--data); }
+/* Дописследование — обложка в рамке браузера; палитра остаётся бирюзовой. */
+.browser-cover { border-radius: 12px; padding-top: 110px; box-shadow: 0 10px 30px #164f560b; }
+.browser-cover::before { display: none; }
+.browser-chrome { position: absolute; inset: 0 0 auto; height: 54px; display: flex;
+  align-items: center; gap: 24px; padding: 0 22px; background: var(--data-soft);
+  border-bottom: 1px solid var(--line); color: var(--data); }
+.browser-dots { display: flex; gap: 7px; flex: none; }
+.browser-dots i { width: 9px; height: 9px; border: 1px solid var(--data); border-radius: 50%; opacity: .6; }
+.browser-address { flex: 1; max-width: 460px; text-align: center; margin-inline: auto;
+  font-family: var(--marimo-monospace-font); font-size: 11px; letter-spacing: .04em;
+  padding: 6px 14px; border: 1px solid var(--line); border-radius: 5px; background: var(--card); }
+.browser-symbol { font-size: 20px; }
+.browser-cover .hero-title { max-width: 19ch; font-size: clamp(40px, 5.3vw, 68px); }
+.browser-cover .hero-vars { margin-top: 32px; }
+.browser-cover .hero-kicker:after { content: "Дополнительное исследование"; display: block;
+  margin-top: 12px; color: var(--muted); font-size: 10px; font-weight: 400; letter-spacing: .1em; }
+@media (max-width: 800px) {
+  .hero-wine { display: flex; flex-direction: column; padding-top: 42px; }
+  .hero-wine .hero-kicker { order: 1; max-width: 100%; }
+  .hero-wine .hero-title { order: 2; max-width: 100%; font-size: clamp(42px, 8vw, 64px); }
+  .hero-wine .hero-sub { order: 3; max-width: 100%; }
+  .hero-wine .wine-hero-art { position: static; order: 4; width: 100%; height: auto;
+    max-width: 460px !important; margin: 20px auto -1px; }
+  .hero-wine .hero-vars { order: 5; margin-top: 0; }
+  .hero-wine > .hero-sub:last-child { order: 6; }
+  .hero-vars { grid-template-columns: 1fr; }
+  .hero-var + .hero-var { border-left: 0; border-top: 1px solid var(--line); padding-left: 0; }
+}
+@media (max-width: 600px) {
+  :root { --block-gutter: 24px; }
+  .site-masthead { padding-left: 48px; gap: 12px; }
+  .site-wordmark { font-size: 23px; }
+  .site-edition { font-size: 8px; }
+  .toc-toggle { top: 16px; left: 12px; width: 42px; height: 42px; }
+  .toc-drawer { inset: 70px auto auto 12px; width: calc(100vw - 24px);
+    max-height: calc(100dvh - 84px); padding: 22px; }
+  figure.plot { padding: 10px; }
+  .browser-chrome { gap: 12px; padding-inline: 16px; }
+  .browser-address { font-size: 9px; }
+  .browser-cover { padding-top: 86px; }
+}
