@@ -643,3 +643,43 @@ figure.plot img {
   .browser-address { font-size: 9px; }
   .browser-cover { padding-top: 86px; }
 }
+
+
+/* Команда 10: единая иерархия заголовков, нижний блок и футер. */
+.sec-l4 h4 { font-size: 1.28rem; font-weight: 600; line-height: 1.4; }
+.sec-l3 h3 { font-size: 1.55rem; line-height: 1.35; }
+.sec h2, .sec h3, .sec h4 { align-items: baseline; }
+.sec .sec-title { flex: 1; min-width: 0; }
+.sec-num { align-self: baseline; line-height: 1.25; }
+#App .output-area:has(#source) { padding-top: 32px; padding-bottom: 40px; }
+#source { margin-top: 0; }
+#App .output-area:has(#source) .code-panel { margin-bottom: 0; }
+.team-badge { display: inline-block; margin-left: 20px; vertical-align: middle;
+  font-family: var(--marimo-text-font); font-size: 13px; line-height: 1.4;
+  letter-spacing: .06em; color: var(--data); white-space: nowrap; }
+.toc-drawer li.toc-depth-3 { margin-left: 14px; }
+.toc-drawer li.toc-depth-4 { margin-left: 28px; font-size: .87rem; }
+.toc-drawer li.toc-depth-2 { margin-top: 14px; font-weight: 600; }
+.site-footer { display: flex; align-items: center; justify-content: space-between;
+  gap: 24px; padding: 32px 0; border-top: 1px solid var(--line); }
+.footer-info { display: flex; flex-direction: column; gap: 8px; }
+.footer-team { font-size: 1.15rem; font-weight: 600; color: var(--data); }
+.footer-subtitle { font-size: .9rem; line-height: 1.6; color: var(--muted); }
+.footer-top { display: inline-flex; align-items: center; justify-content: center;
+  padding: 12px 20px; border: 1px solid var(--data); border-radius: 4px;
+  color: var(--data) !important; text-decoration: none !important; white-space: nowrap; }
+.footer-top:hover { background: var(--data-soft); }
+.footer-top:focus-visible { outline: 2px solid var(--data); outline-offset: 4px; }
+#App .marimo-cell:has(.site-footer) .output-area { padding-top: 12px; padding-bottom: 12px; }
+@media (max-width: 600px) {
+  .sec-l4 h4 { font-size: 1.2rem; }
+  .sec-l3 h3 { font-size: 1.4rem; }
+  .team-badge { display: block; margin: 10px 0 0; font-size: 11px; }
+  .site-footer { flex-direction: column; align-items: flex-start; gap: 20px; padding-block: 26px; }
+  .footer-top { white-space: normal; }
+}
+/* Бокал немного выше; размер изображения сохранён. */
+.wine-hero-art { top: 0; }
+@media (max-width: 800px) {
+  .hero-wine .wine-hero-art { position: relative; top: -20px; margin-bottom: -20px; }
+}
