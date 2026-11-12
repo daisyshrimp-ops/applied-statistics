@@ -727,3 +727,39 @@ body:has(.theme-sprint2-active) .read-glass { display: none; }
   #App [role="tablist"] { gap: 6px; }
   #App [role="tab"] { min-width: 0; flex: 1 1 0; padding: 14px 8px !important; }
 }
+
+
+/* Обложка: текст и иллюстрация разделены, нижний край общий с волной. */
+.hero-wine .hero-intro { position: relative; box-sizing: border-box; padding-bottom: 110px; }
+.hero-wine .hero-intro > :not(.wine-hero-art) { position: relative; z-index: 1; }
+.hero-wine .hero-intro .hero-kicker { max-width: 55%; }
+.hero-wine .hero-intro .hero-title { max-width: 56%; }
+.hero-wine .hero-intro .hero-sub { max-width: 46%; }
+.hero-wine .hero-intro .wine-hero-art {
+  top: auto; bottom: -1px; right: -50px; width: 60%; height: calc(100% + 64px);
+  margin: 0; object-fit: contain; object-position: right bottom;
+}
+.hero-wine .hero-vars { margin-top: 0; }
+.hero-wine .hero-density { bottom: calc(100% - 1px); height: 91px; }
+/* Переносим целые слова, без принудительных разрывов внутри слова. */
+.hero .hero-title, .hero .hero-sub, .hero .hero-kicker,
+.hero .hero-var, .hero .hero-var small, .hero .hero-density-cap,
+.hero .hero-title *, .hero .hero-sub *, .hero .hero-var * {
+  word-break: normal !important; overflow-wrap: normal !important;
+  hyphens: none !important; -webkit-hyphens: none !important;
+}
+.hero .hero-title { text-wrap: balance; }
+.hero .hero-sub, .hero .hero-density-cap { text-wrap: pretty; }
+@media (max-width: 800px) {
+  .hero-wine .hero-intro { display: flex; flex-direction: column; order: 1; padding-bottom: 0; }
+  .hero-wine .hero-intro .hero-kicker,
+  .hero-wine .hero-intro .hero-title,
+  .hero-wine .hero-intro .hero-sub { max-width: 100%; }
+  .hero-wine .hero-intro .wine-hero-art {
+    position: relative; top: auto; bottom: auto; right: auto;
+    width: 100%; height: auto; max-width: 460px !important;
+    margin: 18px auto -1px; order: 4;
+  }
+  .hero-wine .hero-vars { margin-top: 0; }
+  .hero-wine .hero-density { height: 61px; }
+}
