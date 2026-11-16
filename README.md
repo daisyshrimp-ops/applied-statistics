@@ -5,18 +5,12 @@
 ## Важные ссылки:
 
 * сайт: https://daisyshrimp-ops.github.io/applied-statistics/
-* репозиторий: 
+* репозиторий: https://github.com/daisyshrimp-ops/applied-statistics
+* файлы с jupiter notebook лежат в папке research, открывать только sprint1.ipynb(1 спринт),sprint2.ipynb(второй спринт - генератор), uicrit.ipynb(доп ктвд), остальное не надо :( и рекомендуется смотреть в колабе, по крайней мере доп часть ктвд!!
 
 
-## Обновить GitHub Pages
 
-1. Распакуйте архив и загрузите **всё содержимое** в корень репозитория `daisyshrimp-ops/applied-statistics` с заменой файлов. Одного CSS недостаточно.
-2. В GitHub Actions дождитесь зелёного **Deploy site**. Существующий workflow вызывает `python tools/build_site.py`.
-3. Обновите страницу Ctrl+F5.
-
-`site/` в архив не включается: Actions собирает его самостоятельно. Эта версия не опубликована автоматически.
-
-## Локальный запуск
+## Локальный запуск(пусть будет тоже тут)
 
 На Windows запустите `START_WINDOWS.bat`: он установит зависимости, соберёт актуальный `lab01.py` и откроет marimo.
 
