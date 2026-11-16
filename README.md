@@ -7,6 +7,7 @@
 * сайт: https://daisyshrimp-ops.github.io/applied-statistics/
 * репозиторий: https://github.com/daisyshrimp-ops/applied-statistics
 * файлы с jupiter notebook лежат в папке research, открывать только sprint1.ipynb(1 спринт),sprint2.ipynb(второй спринт - генератор), uicrit.ipynb(доп ктвд), остальное не надо :( и рекомендуется смотреть в колабе, по крайней мере доп часть ктвд!!
+* также исходные ноутбуки можно найти в футере сайта, к каждой вкладке прикреплено свое исследование
 
 
 
