@@ -84,4 +84,4 @@ assert (intervals['Средняя доля, %']<=intervals['Верхняя гр�
 assert intervals.groupby(['Показатель','Группа']).size().eq(4).all()
 print('INTERVALS PASS: all 16 original bootstrap estimates and bounds preserved')
 
-print('RUNTIME CHART PASS:',rendered_baselines,'12 figures rebuilt from original code with site palettes')
+print('RUNTIME CHART PASS:',rendered_baselines,'12 figures prepared from original code at build time with site palettes')

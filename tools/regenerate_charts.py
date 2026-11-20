@@ -1,8 +1,10 @@
-"""Attach portable notebook chart execution to the authored report flow."""
-_runtime_source=(ROOT/'tools/notebook_charts.py').read_text(encoding='utf-8')
-cell('_chart_namespace = {}\nexec(compile('+repr(_runtime_source)+', "notebook_charts.py", "exec"), _chart_namespace)\nnotebook_renderer = _chart_namespace["notebook_renderer"]')
-cell("mo.stop(project_tabs.value!='Спринт 2')\nsprint2_charts=notebook_renderer('sprint2',REPORTS,figure,X=X,modules=gen_modules)")
-cell("mo.stop(project_tabs.value!='Доп. КТиД')\nuicrit_charts=notebook_renderer('uicrit',REPORTS,figure,screens=ui_screens,ratings=ui_ratings,boxes=ui_boxes)")
+"""Attach build-prepared notebook charts to the authored report flow."""
+cell("""def saved_notebook_charts(study):
+    def chart(index):
+        return REPORTS[study][index].get('figures',[])
+    return chart
+sprint2_charts=saved_notebook_charts('sprint2')
+uicrit_charts=saved_notebook_charts('uicrit')""")
 for _i,_source in enumerate(CELLS):
     if 'def author_flow(' in _source:
         _source=_source.replace('outputs=True,headers=True):','outputs=True,headers=True,charts=None):')

@@ -24,7 +24,30 @@ REPORT_SOURCE = {}
 exec((ROOT / 'report_data.py').read_text(encoding="utf-8"), REPORT_SOURCE)
 REPORT_SOURCE = REPORT_SOURCE['REPORTS']
 _report_cell_index=len(CELLS)
-cell('REPORTS = ' + repr(REPORT_SOURCE))
+# Keep the Python entry point small; load only the selected report, once.
+import json as _report_json
+_report_directory=ROOT/'public/report-data'
+_report_directory.mkdir(parents=True,exist_ok=True)
+for _study,_items in REPORT_SOURCE.items():
+    (_report_directory/(_study+'.json')).write_text(_report_json.dumps(_items,ensure_ascii=False,separators=(',',':')),encoding='utf-8')
+cell('''REPORTS = {}
+async def load_authored_report(study):
+    if study in REPORTS:return study
+    import json as _json_report
+    import sys as _sys_report
+    if _sys_report.platform=='emscripten':
+        from pyodide.http import pyfetch as _fetch_report
+        _url=str(mo.notebook_location()/'public'/'report-data'/(study+'.json'))
+        _response=await _fetch_report(_url)
+        if not _response.ok:raise RuntimeError(f'Не удалось загрузить исследование {study}: HTTP {_response.status}')
+        _items=_json_report.loads(await _response.string())
+    else:
+        _items=_json_report.loads((mo.notebook_location()/'public'/'report-data'/(study+'.json')).read_text(encoding='utf-8'))
+    REPORTS[study]=_items
+    return study
+''')
+cell('''_active_study={'Спринт 1':'sprint1','Спринт 2':'sprint2','Доп. КТиД':'uicrit'}[project_tabs.value]
+active_report=await load_authored_report(_active_study)''')
 modules = {key: (ROOT / 'winegen' / f'{key}.py').read_text(encoding="utf-8") for key in ['ph', 'sugar', 'alcohol']}
 cell('gen_modules = {}\nfor _name, _source in ' + repr(modules) + '.items():\n    _namespace = {}\n    exec(compile(_source, _name + ".py", "exec"), _namespace)\n    gen_modules[_name] = _namespace\n')
 
@@ -34,6 +57,8 @@ exec(compile((ROOT / 'tools/refine_experience.py').read_text(encoding="utf-8"), 
 exec(compile((ROOT / 'tools/repair_visibility.py').read_text(encoding='utf-8'), 'repair_visibility.py', 'exec'), globals())
 
 exec(compile((ROOT / 'tools/regenerate_charts.py').read_text(encoding='utf-8'), 'regenerate_charts.py', 'exec'), globals())
+
+exec(compile((ROOT / 'tools/optimize_performance.py').read_text(encoding='utf-8'), 'optimize_performance.py', 'exec'), globals())
 
 compiled = [compile_cell(code, cell_id=f'{i:04}') for i,code in enumerate(CELLS)]
 defined = set().union(*(c.defs for c in compiled))

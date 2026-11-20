@@ -1,29 +1,29 @@
-"""Verify original chart bytes are portable, decodable and independent of paths."""
-import base64
+"""Check archival notebook plots and the 12 portable build-prepared plots."""
+import base64,json,re,sys
 from io import BytesIO
 from pathlib import Path
-import re
-import sys
 from PIL import Image,ImageStat
 ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT))
 from report_data import REPORTS
-found=[]
+archives=0;prepared=0
 for study,items in REPORTS.items():
+    notebook=json.loads((ROOT/'research'/f'{study}.executed.ipynb').read_text(encoding='utf-8'))
+    for index,cell in enumerate(notebook['cells']):
+        for number,output in enumerate(cell.get('outputs',[])):
+            encoded=output.get('data',{}).get('image/png')
+            if encoded:
+                raw=base64.b64decode(''.join(encoded),validate=True)
+                assert raw==(ROOT/'public/reports'/study/f'{index}-{number}.png').read_bytes()
+                archives+=1
     for index,item in enumerate(items):
-        assert not re.search(r'src="\./public/reports/',item['html']),(study,index)
-        for attrs in re.findall(r'<img\b([^>]+)>',item['html']):
-            source=re.search(r'src="([^"]+)"',attrs)
-            asset=re.search(r'data-report-asset="([^"]+)"',attrs)
-            if not asset:continue
-            assert source and source[1].startswith('data:image/png;base64,'),(study,index)
-            raw=base64.b64decode(source[1].split(',',1)[1],validate=True)
-            assert raw==(ROOT/asset[1].removeprefix('./')).read_bytes(),(study,index,'Changed PNG')
-            image=Image.open(BytesIO(raw));image.load()
+        assert 'data-report-asset=' not in item['html']
+        for markup in item.get('figures',[]):
+            source=re.search(r'src="data:image/png;base64,([^"]+)"',markup)
+            assert source,(study,index)
+            image=Image.open(BytesIO(base64.b64decode(source[1],validate=True)));image.load()
             assert image.width>100 and image.height>100
-            assert max(ImageStat.Stat(image.convert('RGB')).stddev)>3,(study,index,'Blank PNG')
-            found.append((study,index,asset[1]))
-assert len(found)==48,len(found)
-assert {('sprint2',i) for i in [18,25,52,56]}<={(s,i) for s,i,_ in found}
-print('PASS: all 48 exact original PNGs embedded, decoded and checked for visible content')
-print('PASS: screenshot cases sprint2 cells 18, 25, 52 and 56 do not request external images')
+            assert max(ImageStat.Stat(image.convert('RGB')).stddev)>3
+            prepared+=1
+assert archives==48 and prepared==12,(archives,prepared)
+print('PASS: 48 original archived PNGs unchanged; 12 branded build-prepared plots decoded and nonblank')

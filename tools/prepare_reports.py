@@ -98,6 +98,9 @@ for name in ['sprint1', 'sprint2', 'uicrit']:
         items.append({'kind': 'code', 'html': result_html, 'source': raw_text})
     REPORTS[name] = items
 
+from prepare_performance import prepare_performance
+prepare_performance(REPORTS)
+
 (ROOT / 'report_data.py').write_text('# Generated from research/*.executed.ipynb; regenerate with tools/prepare_reports.py\nREPORTS = ' + repr(REPORTS) + '\n',encoding='utf-8')
 print('Compiled', {k: len(v) for k,v in REPORTS.items()})
 
